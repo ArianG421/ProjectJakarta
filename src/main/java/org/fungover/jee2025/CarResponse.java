@@ -1,4 +1,4 @@
-package org.fungover.jee2025.entity;
+package org.fungover.jee2025;
 
 public class CarResponse {
 

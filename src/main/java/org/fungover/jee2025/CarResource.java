@@ -1,7 +1,5 @@
 package org.fungover.jee2025;
 
-import jakarta.data.repository.Repository;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -12,7 +10,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.java.Log;
 import org.fungover.jee2025.entity.Car;
-import org.fungover.jee2025.entity.CarResponse;
 
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDate;
