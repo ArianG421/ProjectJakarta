@@ -1,27 +1,29 @@
 package org.fungover.jee2025.DTO;
 
-import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UpdateCarDTO {
 
     private String name;
 
     private String description;
 
-    @PastOrPresent(message = "Datum kan inte vara i framtiden")
+    @PastOrPresent(message = "Date cannot be in the future")
     private LocalDate manufactureDate;
 
-    @Pattern(regexp = "^[A-Z]{3}[0-9]{2}[A-Z0-9]$", message = "Ogiltigt registreringsnummer")
+    @Pattern(regexp = "^[A-Z]{3}[0-9]{2}[A-Z0-9]$", message = "Invalid registration number")
     private String registrationNumber;
 
-    @Positive(message = "Motorstyrka måste vara positiv")
-    private Integer enginePower; // Integer istället för int så att det kan vara null
-
-    // Getters och setters
+    @Positive(message = "Horsepower must be positive")
+    private Integer enginePower; // Integer instead of int to allow null values
 }

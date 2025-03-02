@@ -13,25 +13,24 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor // Lombok: Generates a no-argument constructor
-@Builder // Lombok: Generates a builder for the class
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long carId;
 
-    @NotBlank(message = "Name can not be empty")
+    @NotBlank(message = "Name cannot be empty")
     private String carName;
 
     private String description;
 
-    @PastOrPresent(message = "Date can not be in the future")
+    @PastOrPresent(message = "Date cannot be in the future")
     private LocalDate Manufacturedate;
 
-    @Pattern(regexp = "^[A-Z]{3}[0-9]{2}[A-Z0-9]$", message = "Ogiltigt registreringsnummer")
+    @Pattern(regexp = "^[A-Z]{3}[0-9]{2}[A-Z0-9]$", message = "Invalid registration number")
     @Column(unique = true)
     private String carRegistrationNumber;
 

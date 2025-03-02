@@ -1,32 +1,31 @@
 package org.fungover.jee2025.DTO;
 
-
-import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
+import lombok.*;
 
+import java.time.LocalDate;
 
-@Getter // Lombok: Generates getters for all fields
-@Setter // Lombok: Generates setters for all fields
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CreateCarDTO {
 
-    @NotBlank(message = "Namn får inte vara tomt")
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
     private String description;
 
-    @PastOrPresent(message = "Datum kan inte vara i framtiden")
+    @PastOrPresent(message = "Date cannot be in the future")
     private LocalDate manufactureDate;
 
-    @Pattern(regexp = "^[A-Z]{3}[0-9]{2}[A-Z0-9]$", message = "Ogiltigt registreringsnummer")
+    @Pattern(regexp = "^[A-Z]{3}[0-9]{2}[A-Z0-9]$", message = "Invalid registration number")
     private String registrationNumber;
 
-    @Positive(message = "Motorstyrka måste vara positiv")
+    @Positive(message = "Horsepower must be positive")
     private int enginePower;
 }
