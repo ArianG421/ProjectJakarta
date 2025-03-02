@@ -24,12 +24,19 @@ public class CarResource {
 
     @PersistenceContext
     private EntityManager entityManager;
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response getCar() {
-        Car newCar = new Car("Sample Car", "A sample description", LocalDate.now(), "ABC12D", 150);
+        // Use the builder to create a Car object
+        Car newCar =     Car.builder()
+                .carName("Sample Car")
+                .description("A sample description")
+                .Manufacturedate(LocalDate.now())
+                .carRegistrationNumber("ABC12D")
+                .horsePower(150)
+                .build();
+
         entityManager.persist(newCar);
         entityManager.flush();
 
