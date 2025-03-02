@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
 
 @Entity
+//Car entity
 public class Car {
 
     @Id
