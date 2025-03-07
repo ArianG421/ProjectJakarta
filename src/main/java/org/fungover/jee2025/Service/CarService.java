@@ -6,6 +6,7 @@ import org.fungover.jee2025.CarMapper;
 import org.fungover.jee2025.DTO.CarDTO;
 import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
+import org.fungover.jee2025.Exceptions.ResourceNotFoundException;
 import org.fungover.jee2025.entity.Car;
 import org.fungover.jee2025.repository.CarRepository;
 
@@ -16,16 +17,16 @@ public class CarService {
     @Inject
     private CarRepository carRepository;
 
-//    public CarDTO findById(Long id) {
-//        return carRepository.findById(id)
-//                .map(CarMapper::toCarDTO)
-//                .orElseThrow(() -> new ResourceNotFoundException("Car with id" + id + "not found!"));
-//    }
+    public CarDTO findById(Long id) {
+        return carRepository.findById(id)
+                .map(CarMapper::toCarDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Car with id" + id + "not found!"));
+    }
 
     public void deleteCar(Long id) {
-//    if (!carRepository.existsById(id)) {
-//        throw new ResourceNotFoundException("Bilen med id " + id + " kunde inte tas bort eftersom den inte finns.");
-//    }
+        if (carRepository.existsById(id) == null) {
+            throw new ResourceNotFoundException("Bilen med id " + id + " kunde inte tas bort eftersom den inte finns.");
+        }
         carRepository.deleteById(id);
     }
 
@@ -43,15 +44,16 @@ public class CarService {
             e.printStackTrace();
         }
     }
-//
-//    public void updateCar(Long carId, UpdateCarDTO updateCarDTO) {
-//        Optional<Car> optionalCar = carRepository.findById(carId);
-//        if (optionalCar.isPresent()) {
-//            Car car = optionalCar.get();
-//            CarMapper.INSTANCE.(updateCarDTO, car);
-//            carRepository.update(car);
-//        }
+
+    public void updateCar(Long carId, UpdateCarDTO updateCarDTO) {
+        Optional<Car> optionalCar = carRepository.findById(carId);
+        if (optionalCar.isPresent()) {
+            Car car = optionalCar.get();
+            CarMapper.updateCarFromDTO(updateCarDTO, car);
+            carRepository.update(car);
+        }
 
 
     }
+}
 

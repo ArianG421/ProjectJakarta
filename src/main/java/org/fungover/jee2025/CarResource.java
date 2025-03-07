@@ -35,27 +35,6 @@ public class CarResource {
     public CarResource() {
     }
 
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Transactional
-//    public Response createCar(CreateCarDTO createCarDTO) {
-//        // Convert CreateCarDTO to Car entity using the mapper
-//        Car newCar = carMapper.createCarDTOToCar(createCarDTO);
-//
-//        // Persist the Car entity
-//        entityManager.persist(newCar);
-//        entityManager.flush();
-//
-//        // Convert Car entity to CarDTO using the mapper
-//        CarDTO carDTO = carMapper.carToCarDTO(newCar);
-//
-//        return Response
-//                .status(Response.Status.CREATED)
-//                .entity(carDTO)
-//                .build();
-//    }
-
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
