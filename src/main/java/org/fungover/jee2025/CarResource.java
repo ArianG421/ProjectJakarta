@@ -1,5 +1,6 @@
 package org.fungover.jee2025;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,7 @@ import lombok.extern.java.Log;
 import org.fungover.jee2025.DTO.CarDTO;
 import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
+import org.fungover.jee2025.Service.CarService;
 import org.fungover.jee2025.entity.Car;
 
 import java.util.List;
@@ -20,31 +22,47 @@ import java.util.logging.Logger;
 public class CarResource {
 
     private static final Logger logger = Logger.getLogger(CarResource.class.getName());
+    private CarService carService;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final CarMapper carMapper = CarMapper.INSTANCE;
+    @jakarta.inject.Inject
+    public CarResource(CarService carService) {
+        this.carService = carService;
+    }
+
+    public CarResource() {
+    }
+
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Transactional
+//    public Response createCar(CreateCarDTO createCarDTO) {
+//        // Convert CreateCarDTO to Car entity using the mapper
+//        Car newCar = carMapper.createCarDTOToCar(createCarDTO);
+//
+//        // Persist the Car entity
+//        entityManager.persist(newCar);
+//        entityManager.flush();
+//
+//        // Convert Car entity to CarDTO using the mapper
+//        CarDTO carDTO = carMapper.carToCarDTO(newCar);
+//
+//        return Response
+//                .status(Response.Status.CREATED)
+//                .entity(carDTO)
+//                .build();
+//    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createCar(CreateCarDTO createCarDTO) {
-        // Convert CreateCarDTO to Car entity using the mapper
-        Car newCar = carMapper.createCarDTOToCar(createCarDTO);
-
-        // Persist the Car entity
-        entityManager.persist(newCar);
-        entityManager.flush();
-
-        // Convert Car entity to CarDTO using the mapper
-        CarDTO carDTO = carMapper.carToCarDTO(newCar);
-
-        return Response
-                .status(Response.Status.CREATED)
-                .entity(carDTO)
-                .build();
+    carService.createCar(createCarDTO);
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @GET
@@ -56,7 +74,7 @@ public class CarResource {
 
         if (car != null) {
             // Convert Car entity to CarDTO using the mapper
-            CarDTO carDTO = carMapper.carToCarDTO(car);
+            CarDTO carDTO = CarMapper.toCarDTO(car);
             return Response.ok().entity(carDTO).build();
         } else {
             return Response
@@ -98,7 +116,7 @@ public class CarResource {
             entityManager.flush();
 
             // Convert Car entity to CarDTO using the mapper
-            CarDTO carDTO = carMapper.carToCarDTO(car);
+            CarDTO carDTO = CarMapper.toCarDTO(car);
             return Response.ok().entity(carDTO).build();
         } else {
             return Response
@@ -136,7 +154,7 @@ public class CarResource {
 
         // Convert Car entities to CarDTOs using the mapper
         List<CarDTO> carDTOs = cars.stream()
-                .map(carMapper::carToCarDTO)
+                .map(CarMapper::toCarDTO)
                 .toList();
 
         return Response.ok().entity(carDTOs).build();
