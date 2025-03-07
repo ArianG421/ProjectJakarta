@@ -10,6 +10,7 @@ import org.fungover.jee2025.Exceptions.ResourceNotFoundException;
 import org.fungover.jee2025.entity.Car;
 import org.fungover.jee2025.repository.CarRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -52,6 +53,10 @@ public class CarService {
             CarMapper.updateCarFromDTO(updateCarDTO, car);
             carRepository.update(car);
         }
+    }
+
+    public List<CarDTO> getAllCars() {
+        List<Car> cars = entity
     }
 
 

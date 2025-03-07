@@ -17,6 +17,6 @@ public interface CarRepository extends CrudRepository<Car, Long> {
     List<Car> findCarById(Long carId);
 
     @Find
-    Car existsById(Long id);
+    Car existsById(Long carId);
 
 }

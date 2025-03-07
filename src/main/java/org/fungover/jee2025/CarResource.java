@@ -41,7 +41,7 @@ public class CarResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createCar(CreateCarDTO createCarDTO) {
-    carService.createCar(createCarDTO);
+        carService.createCar(createCarDTO);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -63,60 +63,16 @@ public class CarResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response updateCar(@PathParam("id") Long id, UpdateCarDTO updateCarDTO) {
-        // Fetch the Car entity by ID
-        Car car = entityManager.find(Car.class, id);
-
-        if (car != null) {
-            // Update the Car entity with values from UpdateCarDTO
-            if (updateCarDTO.getName() != null) {
-                car.setCarName(updateCarDTO.getName());
-            }
-            if (updateCarDTO.getDescription() != null) {
-                car.setDescription(updateCarDTO.getDescription());
-            }
-            if (updateCarDTO.getManufactureDate() != null) {
-                car.setManufacturedate(updateCarDTO.getManufactureDate());
-            }
-            if (updateCarDTO.getRegistrationNumber() != null) {
-                car.setCarRegistrationNumber(updateCarDTO.getRegistrationNumber());
-            }
-            if (updateCarDTO.getEnginePower() != null) {
-                car.setHorsePower(updateCarDTO.getEnginePower());
-            }
-
-            // Persist the updated Car entity
-            entityManager.merge(car);
-            entityManager.flush();
-
-            // Convert Car entity to CarDTO using the mapper
-            CarDTO carDTO = CarMapper.toCarDTO(car);
-            return Response.ok().entity(carDTO).build();
-        } else {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("Car not found")
-                    .build();
-        }
+        carService.updateCar(id, updateCarDTO);
+        return Response.ok().build();
     }
 
     @DELETE
     @Path("/{id}")
     @Transactional
     public Response deleteCar(@PathParam("id") Long id) {
-        // Fetch the Car entity by ID
-        Car car = entityManager.find(Car.class, id);
-
-        if (car != null) {
-            // Remove the Car entity
-            entityManager.remove(car);
-            entityManager.flush();
-            return Response.noContent().build();
-        } else {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("Car not found")
-                    .build();
-        }
+    carService.deleteCar(id);
+    return Response.noContent().build();
     }
 
     @GET
