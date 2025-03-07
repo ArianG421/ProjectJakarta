@@ -11,6 +11,7 @@ import lombok.extern.java.Log;
 import org.fungover.jee2025.DTO.CarDTO;
 import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
+import org.fungover.jee2025.Exceptions.ResourceNotFoundException;
 import org.fungover.jee2025.Service.CarService;
 import org.fungover.jee2025.entity.Car;
 
@@ -48,19 +49,12 @@ public class CarResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCarById(@PathParam("id") Long id) {
-        // Fetch the Car entity by ID
-        Car car = entityManager.find(Car.class, id);
-
-        if (car != null) {
-            // Convert Car entity to CarDTO using the mapper
-            CarDTO carDTO = CarMapper.toCarDTO(car);
-            return Response.ok().entity(carDTO).build();
-        } else {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("Car not found")
-                    .build();
+        CarDTO carDTO = carService.getCar(id);
+        if (carDTO == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
+        return Response.ok(carDTO).build();
+
     }
 
     @PUT
