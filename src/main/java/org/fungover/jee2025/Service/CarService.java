@@ -1,5 +1,6 @@
 package org.fungover.jee2025.Service;
 
+import jakarta.data.page.Page;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.fungover.jee2025.CarMapper;
@@ -7,6 +8,7 @@ import org.fungover.jee2025.DTO.CarDTO;
 import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
 import org.fungover.jee2025.entity.Car;
+import org.fungover.jee2025.pagination.Pageable;
 import org.fungover.jee2025.repository.CarRepository;
 
 import java.time.LocalDate;
@@ -49,14 +51,24 @@ public class CarService {
         }
     }
 
-    public List<CarDTO> filterCars(String carName, LocalDate manufactureDate) {
-        List<Car> cars = carRepository.findByCarNameAndManufacturedate(carName, manufactureDate);
+    public List<CarDTO> filterCars(String carName, LocalDate Manufacturedate) {
+        List<Car> cars = carRepository.findByCarNameAndManufacturedate(carName, Manufacturedate);
         return cars.stream()
                 .map(CarMapper::toCarDTO)
                 .collect(Collectors.toList());
 
 
     }
+
+    public Page<Car> getAllCars(Pageable pageable) {
+        return carRepository.findAll(pageable);
+
+    }
+
+
+
+
+
 
 
 

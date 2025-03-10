@@ -1,7 +1,8 @@
 package org.fungover.jee2025;
 
 
-import jakarta.annotation.PostConstruct;
+
+import jakarta.data.page.Page;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -13,14 +14,15 @@ import lombok.extern.java.Log;
 import org.fungover.jee2025.DTO.CarDTO;
 import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
-import org.fungover.jee2025.Exceptions.ResourceNotFoundException;
 import org.fungover.jee2025.Service.CarService;
 import org.fungover.jee2025.entity.Car;
-
+import org.fungover.jee2025.pagination.Pageable;
+import org.fungover.jee2025.pagination.pageRequest;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 
 @Path("/cars")
 @Log
@@ -90,10 +92,25 @@ public class CarResource {
     @GET
     @Path("/filter")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCarsByFilter(@QueryParam("name") String name, @QueryParam("manufactureDate")String manufactureDate) {
-        LocalDate date = manufactureDate != null ? LocalDate.parse(manufactureDate) : null;
+    public Response getCarsByFilter(@QueryParam("name") String name, @QueryParam("Manufacturedate")String Manufacturedate) {
+        LocalDate date = Manufacturedate != null ? LocalDate.parse(Manufacturedate) : null;
         List<CarDTO> carDTOS = carService.filterCars(name, date);
         return Response.ok().entity(carDTOS).build();
     }
+
+    @GET
+    @Path("/paginated")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPaginatedCars (@QueryParam("page")int page, @QueryParam("size") int size) {
+        Pageable pageable = new pageRequest(page, size);
+        Page<Car> carPage = carService.getAllCars(pageable);
+        List<CarDTO> dtos = carPage.stream()
+                .map(CarMapper::toCarDTO)
+                .collect(Collectors.toList());
+
+        return Response.ok(dtos).build();
+    }
+
+
 
 }
