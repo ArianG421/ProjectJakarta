@@ -9,8 +9,10 @@ import org.fungover.jee2025.DTO.UpdateCarDTO;
 import org.fungover.jee2025.entity.Car;
 import org.fungover.jee2025.repository.CarRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class CarService {
@@ -46,6 +48,17 @@ public class CarService {
             carRepository.update(car);
         }
     }
+
+    public List<CarDTO> filterCars(String carName, LocalDate manufactureDate) {
+        List<Car> cars = carRepository.findByCarNameAndManufacturedate(carName, manufactureDate);
+        return cars.stream()
+                .map(CarMapper::toCarDTO)
+                .collect(Collectors.toList());
+
+
+    }
+
+
 
 }
 

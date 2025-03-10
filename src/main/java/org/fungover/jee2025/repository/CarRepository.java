@@ -1,6 +1,7 @@
 package org.fungover.jee2025.repository;
 
 import java.awt.print.Pageable;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.data.page.Page;
@@ -21,6 +22,10 @@ public interface CarRepository extends CrudRepository<Car, Long> {
 
     @Find
     Car existsById(Long carId);
+
+    List<Car> findByCarNameAndManufacturedate(String carName, LocalDate manufactureDate);
+
+
 
     Page<Car> findAll(Pageable pageable);
 
