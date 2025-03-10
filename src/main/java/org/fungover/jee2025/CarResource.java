@@ -1,6 +1,7 @@
 package org.fungover.jee2025;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -23,18 +24,13 @@ import java.util.logging.Logger;
 public class CarResource {
 
     private static final Logger logger = Logger.getLogger(CarResource.class.getName());
+    @Inject
     private CarService carService;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @jakarta.inject.Inject
-    public CarResource(CarService carService) {
-        this.carService = carService;
-    }
 
-    public CarResource() {
-    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
