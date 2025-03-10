@@ -1,5 +1,6 @@
 package org.fungover.jee2025;
 
+
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -16,7 +17,9 @@ import org.fungover.jee2025.Exceptions.ResourceNotFoundException;
 import org.fungover.jee2025.Service.CarService;
 import org.fungover.jee2025.entity.Car;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 @Path("/cars")
@@ -29,7 +32,6 @@ public class CarResource {
 
     @PersistenceContext
     private EntityManager entityManager;
-
 
 
     @POST
@@ -67,8 +69,8 @@ public class CarResource {
     @Path("/{id}")
     @Transactional
     public Response deleteCar(@PathParam("id") Long id) {
-    carService.deleteCar(id);
-    return Response.noContent().build();
+        carService.deleteCar(id);
+        return Response.noContent().build();
     }
 
     @GET
@@ -84,4 +86,14 @@ public class CarResource {
 
         return Response.ok().entity(carDTOs).build();
     }
+
+    @GET
+    @Path("/filter")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCarsByFilter(@QueryParam("name") String name, @QueryParam("manufactureDate")String manufactureDate) {
+        LocalDate date = manufactureDate != null ? LocalDate.parse(manufactureDate) : null;
+        List<CarDTO> carDTOS = carService.filterCars(name, date);
+        return Response.ok().entity(carDTOS).build();
+    }
+
 }

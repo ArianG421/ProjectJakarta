@@ -28,7 +28,7 @@ public class Car {
     private String description;
 
     @PastOrPresent(message = "Date cannot be in the future")
-    private LocalDate Manufacturedate;
+    private LocalDate manufactureDate;
 
     @Pattern(regexp = "^[A-Z]{3}[0-9]{2}[A-Z0-9]$", message = "Invalid registration number")
     @Column(unique = true)
