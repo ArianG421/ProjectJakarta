@@ -8,7 +8,6 @@ import org.fungover.jee2025.DTO.CarDTO;
 import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
 import org.fungover.jee2025.entity.Car;
-import org.fungover.jee2025.pagination.Pageable;
 import org.fungover.jee2025.repository.CarRepository;
 
 import java.time.LocalDate;
@@ -60,10 +59,6 @@ public class CarService {
 
     }
 
-    public Page<Car> getAllCars(Pageable pageable) {
-        return carRepository.findAll(pageable);
-
-    }
 
 
 }

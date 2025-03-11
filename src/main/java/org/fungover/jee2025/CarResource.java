@@ -16,8 +16,6 @@ import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
 import org.fungover.jee2025.Service.CarService;
 import org.fungover.jee2025.entity.Car;
-import org.fungover.jee2025.pagination.Pageable;
-import org.fungover.jee2025.pagination.pageRequest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
@@ -98,19 +96,7 @@ public class CarResource {
         return Response.ok().entity(carDTOS).build();
     }
 
-    @GET
-    @Path("/paginated")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPaginatedCars (@QueryParam("page")int page, @QueryParam("size") int size) {
-        Pageable pageable = new pageRequest(page, size);
-        Page<Car> carPage = carService.getAllCars(pageable);
-        List<CarDTO> dtos = carPage.stream()
-                .map(CarMapper::toCarDTO)
-                .collect(Collectors.toList());
 
-        return Response.ok(dtos).build();
-    }
-//PushComment
 
 
 }
