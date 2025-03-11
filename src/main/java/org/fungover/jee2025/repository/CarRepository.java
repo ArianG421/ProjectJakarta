@@ -1,5 +1,6 @@
 package org.fungover.jee2025.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.data.page.Page;
@@ -23,7 +24,10 @@ public interface CarRepository extends CrudRepository<Car, Long> {
     Car existsById(Long carId);
 
     @Find
-    List<Car> findByCarNameAndManufacturedate(String carName, LocalDate manufactureDate);
+    List<Car> filterById(Long carId);
+
+    @Find
+    List<Car> filterByName(String carName);
 
 
     @Find

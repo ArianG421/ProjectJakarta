@@ -57,13 +57,20 @@ public class CarService {
         return carRepository.findAll(pageRequest).stream().map(CarMapper::toCarDTO).toList();
     }
 
-    public List<CarDTO> filterCars(String carName, LocalDate Manufacturedate) {
-        List<Car> cars = carRepository.findByCarNameAndManufacturedate(carName, Manufacturedate);
+    public List<CarDTO> filterCarsById(Long carId) {
+        List<Car> cars = carRepository.filterById(carId);
         return cars.stream()
                 .map(CarMapper::toCarDTO)
                 .collect(Collectors.toList());
 
 
+    }
+
+    public List<CarDTO> filterCarsByName(String name) {
+        List<Car> cars = carRepository.filterByName(name);
+        return cars.stream()
+                .map(CarMapper::toCarDTO)
+                .collect(Collectors.toList());
     }
 
 

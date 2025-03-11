@@ -98,9 +98,16 @@ public class CarResource {
     @GET
     @Path("/filter")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCarsByFilter(@QueryParam("name") String name, @QueryParam("Manufacturedate")String Manufacturedate) {
-        LocalDate date = Manufacturedate != null ? LocalDate.parse(Manufacturedate) : null;
-        List<CarDTO> carDTOS = carService.filterCars(name, date);
+    public Response getCarsByFilter(@QueryParam("carId") Long carId) {
+        List<CarDTO> carDTOS = carService.filterCarsById(carId);
+        return Response.ok().entity(carDTOS).build();
+    }
+
+    @GET
+    @Path("/filter1")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCarsByName(@QueryParam("carName") String carName) {
+        List<CarDTO> carDTOS = carService.filterCarsByName(carName);
         return Response.ok().entity(carDTOS).build();
     }
 
