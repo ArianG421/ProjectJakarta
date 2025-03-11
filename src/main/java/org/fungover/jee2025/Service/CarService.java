@@ -1,6 +1,8 @@
 package org.fungover.jee2025.Service;
 
+
 import jakarta.data.page.Page;
+import jakarta.data.page.PageRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.fungover.jee2025.CarMapper;
@@ -48,6 +50,11 @@ public class CarService {
             CarMapper.updateCarFromDTO(updateCarDTO, car);
             carRepository.update(car);
         }
+    }
+
+    public List<CarDTO> getAllCars(int page, int size) {
+        PageRequest pageRequest = PageRequest.ofPage(page).size(size);
+        return carRepository.findAll(pageRequest).stream().map(CarMapper::toCarDTO).toList();
     }
 
     public List<CarDTO> filterCars(String carName, LocalDate Manufacturedate) {

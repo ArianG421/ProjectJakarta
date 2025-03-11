@@ -1,8 +1,6 @@
 package org.fungover.jee2025;
 
-
-
-import jakarta.data.page.Page;
+import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,6 +12,7 @@ import lombok.extern.java.Log;
 import org.fungover.jee2025.DTO.CarDTO;
 import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
+import org.fungover.jee2025.Exceptions.ResourceNotFoundException;
 import org.fungover.jee2025.Service.CarService;
 import org.fungover.jee2025.entity.Car;
 import java.time.LocalDate;
@@ -86,6 +85,15 @@ public class CarResource {
 
         return Response.ok().entity(carDTOs).build();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CarDTO> getCars(
+            @QueryParam("page") Integer page,
+            @QueryParam("size") Integer size) {
+        return carService.getAllCars(page, size);
+    }
+
 
     @GET
     @Path("/filter")
