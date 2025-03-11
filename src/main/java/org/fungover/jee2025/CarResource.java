@@ -87,6 +87,7 @@ public class CarResource {
     }
 
     @GET
+    @Path("/page")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CarDTO> getCars(
             @QueryParam("page") Integer page,

@@ -2,6 +2,7 @@ package org.fungover.jee2025.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.data.page.Page;
 import jakarta.data.page.PageRequest;
@@ -32,5 +33,8 @@ public interface CarRepository extends CrudRepository<Car, Long> {
 
     @Find
     Page<Car> findAll(PageRequest pageable);
+
+    @Find
+    Optional<Car> findByRegistrationNumber(String carRegistrationNumber);
 
 }
