@@ -1,6 +1,9 @@
 package org.fungover.jee2025.repository;
 
 import java.util.List;
+
+import jakarta.data.page.Page;
+import jakarta.data.page.PageRequest;
 import jakarta.data.repository.CrudRepository;
 import jakarta.data.repository.Find;
 import jakarta.data.repository.Repository;
@@ -18,5 +21,7 @@ public interface CarRepository extends CrudRepository<Car, Long> {
 
     @Find
     Car existsById(Long carId);
+
+    Page<Car> findAll(PageRequest pageable);
 
 }

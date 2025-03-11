@@ -17,6 +17,7 @@ import org.fungover.jee2025.Service.CarService;
 import org.fungover.jee2025.entity.Car;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 @Path("/cars")
@@ -84,4 +85,13 @@ public class CarResource {
 
         return Response.ok().entity(carDTOs).build();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CarDTO> getCars(
+            @QueryParam("page") Integer page,
+            @QueryParam("size") Integer size) {
+        return carService.getAllCars(page, size);
+    }
+
 }

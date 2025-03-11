@@ -1,5 +1,7 @@
 package org.fungover.jee2025.Service;
 
+import jakarta.data.page.Page;
+import jakarta.data.page.PageRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.fungover.jee2025.CarMapper;
@@ -9,6 +11,7 @@ import org.fungover.jee2025.DTO.UpdateCarDTO;
 import org.fungover.jee2025.entity.Car;
 import org.fungover.jee2025.repository.CarRepository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,5 +50,11 @@ public class CarService {
         }
     }
 
-}
+    public List<CarDTO> getAllCars(int page, int size) {
+        PageRequest pageRequest = PageRequest.ofPage(page).size(size);
+        return carRepository.findAll(pageRequest).stream().map(CarMapper::toCarDTO).toList();
+    }
 
+
+
+}
