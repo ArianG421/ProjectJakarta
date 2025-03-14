@@ -31,9 +31,6 @@ public class CarService {
                 .orElseThrow(() -> new ResourceNotFoundException("Car with id" + id + "not found!"));
    }
 
-//    public void deleteCar(Long id) {
-//        carRepository.deleteById(id);
-//    }
 
     public void deleteCar(Long id) {
         if (id == null || id <= 0) {
@@ -42,10 +39,6 @@ public class CarService {
         carRepository.deleteById(id);
     }
 
-//    public CarDTO getCar(Long carId) {
-//        Optional<Car> car = carRepository.findById(carId);
-//        return car.map(CarMapper::toCarDTO).orElse(null);
-//    }
 
     public CarDTO getCar(Long carId) {
         return carRepository.findById(carId)
@@ -95,44 +88,5 @@ public class CarService {
                 .map(CarMapper::toCarDTO)
                 .collect(Collectors.toList());
     }
-
-
-
-//    public List<CarDTO> getAllCars(int page, int size) {
-//        if (page < 0 || size <= 0) {
-//            throw new ValidationException("Invalid pagination values: page " + page + ", size " + size);
-//        }
-//
-//        PageRequest pageRequest = PageRequest.ofPage(page).size(size);
-//        return carRepository.findAll(pageRequest).stream()
-//                .map(CarMapper::toCarDTO)
-//                .toList();
-//    }
-//
-//    // ValidationException
-//    public List<CarDTO> filterCarsById(Long carId) {
-//        if (carId == null || carId <= 0) {
-//            throw new ValidationException("Invalid car ID: " + carId);
-//        }
-//
-//        List<Car> cars = carRepository.filterById(carId);
-//        return cars.stream()
-//                .map(CarMapper::toCarDTO)
-//                .collect(Collectors.toList());
-//    }
-//
-//    // ValidationException
-//    public List<CarDTO> filterCarsByName(String name) {
-//        if (name == null || name.trim().isEmpty()) {
-//            throw new ValidationException("Car name cannot be empty!");
-//        }
-//
-//        List<Car> cars = carRepository.filterByName(name);
-//        return cars.stream()
-//                .map(CarMapper::toCarDTO)
-//                .collect(Collectors.toList());
-//    }
-
-
 
 }
