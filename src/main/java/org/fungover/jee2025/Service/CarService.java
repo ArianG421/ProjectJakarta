@@ -48,16 +48,21 @@ public class CarService {
 
 
     public void createCar(CreateCarDTO createCarDTO) {
+        // Validera registreringsnumret
         if (createCarDTO.getRegistrationNumber() == null || createCarDTO.getRegistrationNumber().isEmpty()) {
             throw new ValidationException("Registration number cannot be empty!");
         }
 
+        // Kontrollera om en bil med samma registreringsnummer redan finns
         Optional<Car> existingCar = carRepository.findByRegistrationNumber(createCarDTO.getRegistrationNumber());
         if (existingCar.isPresent()) {
             throw new CarAlreadyExistsException("Car with registration number " + createCarDTO.getRegistrationNumber() + " already exists!");
         }
-    }
 
+        // Skapa en ny bil från CreateCarDTO och spara den i databasen
+        Car newCar = CarMapper.toCar(createCarDTO); // Använd en mapper för att konvertera CreateCarDTO till Car
+        carRepository.save(newCar);
+    }
 
 
     public void updateCar(Long carId, UpdateCarDTO updateCarDTO) {

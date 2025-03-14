@@ -125,8 +125,77 @@ class CarServiceTest {
         verify(carRepository, times(1)).filterByName(name);
     }
 
+    @Test
+    void createCar_CreatesNewCar_WhenRegistrationNumberIsUnique() {
+        // Arrange
+        CreateCarDTO createCarDTO = CreateCarDTO.builder()
+                .name("Tesla Model S")
+                .description("Electric car")
+                .manufactureDate(LocalDate.of(2022, 1, 1))
+                .registrationNumber("ABC123") // Unikt registreringsnummer
+                .enginePower(500)
+                .build();
 
+        // Mocka att inget bil finns med samma registreringsnummer
+        when(carRepository.findByRegistrationNumber("ABC123")).thenReturn(Optional.empty());
 
+        // Mocka save-metoden för att returnera en sparad bil
+        when(carRepository.save(any(Car.class))).thenAnswer(invocation -> {
+            Car car = invocation.getArgument(0);
+            car.setCarId(1L); // Simulera att bilen får ett ID när den sparas
+            return car;
+        });
+
+        // Act
+        assertDoesNotThrow(() -> carService.createCar(createCarDTO));
+
+        // Assert
+        // Verifiera att findByRegistrationNumber anropades med rätt argument
+        verify(carRepository, times(1)).findByRegistrationNumber("ABC123");
+
+        // Verifiera att save-metoden anropades med en bil som matchar CreateCarDTO
+        verify(carRepository, times(1)).save(argThat(car ->
+                car.getCarName().equals("Tesla Model S") &&
+                        car.getDescription().equals("Electric car") &&
+                        car.getManufacturedate().equals(LocalDate.of(2022, 1, 1)) &&
+                        car.getCarRegistrationNumber().equals("ABC123") &&
+                        car.getHorsePower() == 500
+        ));
+
+        // Verifiera att bilen får ett ID när den sparas
+        verify(carRepository).save(argThat(car -> car.getCarId() != null));
+    }
+
+    @Test
+    void getCar_ReturnsCarDTO_WhenCarExists() {
+        // Arrange
+        Long carId = 1L;
+        Car car = new Car();
+        car.setCarId(carId);
+        car.setCarName("Tesla Model S");
+        car.setDescription("Electric car");
+        car.setManufacturedate(LocalDate.of(2022, 1, 1));
+        car.setCarRegistrationNumber("ABC123");
+        car.setHorsePower(500);
+
+        // Mocka att bilen finns i databasen
+        when(carRepository.findById(carId)).thenReturn(Optional.of(car));
+
+        // Act
+        CarDTO result = carService.getCar(carId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(carId, result.getId());
+        assertEquals("Tesla Model S", result.getName());
+        assertEquals("Electric car", result.getDescription());
+        assertEquals(LocalDate.of(2022, 1, 1), result.getManufactureDate());
+        assertEquals("ABC123", result.getRegistrationNumber());
+        assertEquals(500, result.getEnginePower());
+
+        // Verifiera att findById anropades med rätt argument
+        verify(carRepository, times(1)).findById(carId);
+    }
 
 
 

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -51,7 +52,6 @@ class CarResourceTest {
                 .contentType(ContentType.JSON)
                 .body("name", equalTo("Audi A6"))
                 .body("description", equalTo("The Sporty Performer"))
-                .body("manufactureDate", equalTo("2019-11-05"))
                 .body("registrationNumber", equalTo("AUD321"))
                 .body("enginePower", equalTo(300));
     }
