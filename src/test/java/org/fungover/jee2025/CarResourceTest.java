@@ -3,24 +3,75 @@ package org.fungover.jee2025;
 import static org.junit.jupiter.api.Assertions.*;import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.undertow.Undertow;
+import io.undertow.servlet.api.DeploymentInfo;
+import jakarta.inject.Inject;
+import org.fungover.jee2025.DTO.CarDTO;
 import org.fungover.jee2025.DTO.CreateCarDTO;
 import org.fungover.jee2025.DTO.UpdateCarDTO;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.fungover.jee2025.Service.CarService;
+import org.fungover.jee2025.entity.Car;
+import org.jboss.resteasy.core.ResteasyDeploymentImpl;
+import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
+import org.jboss.resteasy.spi.ResteasyDeployment;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.time.LocalDate;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.when;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class CarResourceTest {
-    @BeforeAll
-    public void setup(){
-        RestAssured.baseURI = "http://localhost:8080/api/";
+
+    @Mock
+    CarService carService;
+
+    private CarResource carResource;
+    private UndertowJaxrsServer server;
+    private int port;
+
+    @BeforeEach
+    public void setup() throws IOException {
+        CarResource carResource = new CarResource(carService);
+
+        try (ServerSocket socket = new ServerSocket(0)) {
+            port = socket.getLocalPort();
+        }
+
+        server = new UndertowJaxrsServer();
+        server.start(Undertow.builder().addHttpListener(port, "localhost"));
+
+        ResteasyDeployment deployment = new ResteasyDeploymentImpl();
+
+        deployment.getResources().add(carResource);
+
+        DeploymentInfo deploymentInfo = server.undertowDeployment(deployment);
+        deploymentInfo.setClassLoader(CarResourceTest.class.getClassLoader());
+        deploymentInfo.setDeploymentName("REST API");
+        deploymentInfo.setContextPath("/api");
+
+        server.deploy(deploymentInfo);
+
+        // Configure REST-Assured
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port = port;
+        RestAssured.basePath = "/api";
+
     }
+        @AfterEach
+        public void tearDown() {
+            if (server != null) {
+                server.stop();
+            }
+        }
 
     @Test
     public void testCreateCar() {
@@ -42,7 +93,18 @@ class CarResourceTest {
 
     @Test
     public void testGetCarById() {
-        Long carId = 9L;
+        Long carId = 13L;
+
+        CarDTO carDTO = CarDTO.builder()
+                .name("Toyota RAV4")
+                .description("The Off-Road Explorer")
+                .registrationNumber("TOY987")
+                .enginePower(280)
+                .build();
+
+        // Mocka carService.getCar()
+        when(carService.getCar(carId)).thenReturn(carDTO);
+
 
         given()
                 .when()
@@ -50,10 +112,10 @@ class CarResourceTest {
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("name", equalTo("Audi A6"))
-                .body("description", equalTo("The Sporty Performer"))
-                .body("registrationNumber", equalTo("AUD321"))
-                .body("enginePower", equalTo(300));
+                .body("name", equalTo("Toyota RAV4"))
+                .body("description", equalTo("The Off-Road Explorer"))
+                .body("registrationNumber", equalTo("TOY987"))
+                .body("enginePower", equalTo(280));
     }
 
     @Test

@@ -25,9 +25,18 @@ import java.util.stream.Collectors;
 @Log
 public class CarResource {
 
+    public CarResource() {}
+
     private static final Logger logger = Logger.getLogger(CarResource.class.getName());
+
     @Inject
     private CarService carService;
+
+    public CarResource(CarService carService) {
+        this.carService = carService;
+    }
+
+
 
     @PersistenceContext
     private EntityManager entityManager;
